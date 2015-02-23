@@ -1,0 +1,36 @@
+{% extends "GraphAwareAppBundle:Default:layout.html.twig" %}
+
+{% block content %}
+<div class="col-sm-12 main">
+    <h1>Neo4j <3 Github</h1>
+
+    {% if is_granted('ROLE_USER') == false %}
+
+    <h3>Demo Application combining Github public events and Neo4j. <br/>
+
+    Import your last 300 Github events into Neo4j in just one click !</h3>
+
+    <p><a href="{{ hwi_oauth_login_url('github') }}">Login and Try !</a></p>
+
+    {% endif %}
+
+</div>
+
+    <div class="col-sm-12 main">
+        <div class="col-sm-4">
+            <h4>Users Registered</h4>
+            <p>{{ active_users }}</p>
+        </div>
+
+        <div class="col-sm-4">
+            <h4>Total Github Events</h4>
+            <p>{{ total_events }}</p>
+        </div>
+
+        <div class="col-sm-4">
+            <h4>Total Repositories</h4>
+            <p>{{ total_repos }}</p>
+        </div>
+    </div>
+
+{% endblock %}

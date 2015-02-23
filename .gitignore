@@ -1,0 +1,8 @@
+!app/cache/.gitkeep
+!app/logs/.gitkeep
+app/cache/*
+app/logs/*
+vendor/
+web/bower_components
+web/bundles/*
+app/config/parameters.yml

@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+
+        <service id="ga.user_provider" class="GraphAware\AppBundle\Security\GithubUserProvider">
+            <argument type="service" id="ga.github_neo"/>
+            <argument type="service" id="ga.github_importer"/>
+            <argument type="service" id="ga.github_client"/>
+        </service>
+
+        <service id="ga.github_neo" class="GraphAware\AppBundle\Service\GithubNeo4j">
+            <argument type="service" id="ga.neo4j"/>
+        </service>
+
+        <service id="ga.github_client" class="GraphAware\AppBundle\Service\GithubClient">
+            <argument>%ga.github_client_id%</argument>
+            <argument>%ga.github_client_secret%</argument>
+            <argument>%ga.github_total_events%</argument>
+        </service>
+
+        <service id="ga.github_importer" class="GraphAware\AppBundle\Service\GithubImporter">
+            <argument type="service" id="ga.neo4j"/>
+        </service>
+    </services>
+</container>

@@ -9,7 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 class DefaultController extends Controller
 {
     /**
-     * @Route("/")
+     * @Route("/", name="home")
      * @Template()
      */
     public function indexAction()
@@ -21,5 +21,16 @@ class DefaultController extends Controller
             'total_events' => (int) $neogh->getEventsCount(),
             'total_repos' => (int) $neogh->getRepositoriesCount()
         );
+    }
+
+    /**
+     * @Route("/createIndexes")
+     */
+    public function createIndexesAction()
+    {
+        $importer = $this->get('ga.github_importer');
+        $importer->createIndexes();
+
+        return $this->redirectToRoute('home');
     }
 }

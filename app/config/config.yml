@@ -77,11 +77,11 @@ graph_aware_neo4j:
     connections:
         default:
             scheme: http
-            host: localhost
-            port: 7474
+            host: %neo4j_host%
+            port: %neo4j_port%
             auth: true
             user: neo4j
-            password: veryCoolMax
+            password: %neo4j_password%
 
 graph_aware_app:
     github_client_id: %gh_client_id%

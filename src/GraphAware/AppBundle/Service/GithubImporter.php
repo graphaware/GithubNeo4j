@@ -45,4 +45,15 @@ class GithubImporter
 
         return $this->client->commitPreparedTransaction($transaction);
     }
+
+    public function createIndexes()
+    {
+        foreach ($this->eventConverter->getInitialSchemaConstraints() as $constraint) {
+            $this->client->createUniqueConstraint($constraint['label'], $constraint['property'], true);
+        }
+
+        foreach ($this->eventConverter->getInitialSchemaIndexes() as $index) {
+            $this->client->createIndex($index['label'], $index['property']);
+        }
+    }
 }

@@ -1324,21 +1324,21 @@
         },
         {
             "name": "neoxygen/neoclient",
-            "version": "2.1.5",
+            "version": "2.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/neoxygen/neo4j-neoclient.git",
-                "reference": "0e342c9723af127710479013cd74fe997a5f19fe"
+                "reference": "e10562bbc697502472d5e75c22b00aedd6b736b9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/neoxygen/neo4j-neoclient/zipball/0e342c9723af127710479013cd74fe997a5f19fe",
-                "reference": "0e342c9723af127710479013cd74fe997a5f19fe",
+                "url": "https://api.github.com/repos/neoxygen/neo4j-neoclient/zipball/e10562bbc697502472d5e75c22b00aedd6b736b9",
+                "reference": "e10562bbc697502472d5e75c22b00aedd6b736b9",
                 "shasum": ""
             },
             "require": {
                 "guzzlehttp/guzzle": "4.*",
-                "monolog/monolog": "~1.3",
+                "monolog/monolog": "~1.1",
                 "php": ">= 5.4",
                 "symfony/config": "~2.5",
                 "symfony/console": "~2.5",
@@ -1382,7 +1382,7 @@
                 "high-availibility",
                 "neo4j"
             ],
-            "time": "2015-02-22 20:28:11"
+            "time": "2015-02-23 22:25:32"
         },
         {
             "name": "psr/log",

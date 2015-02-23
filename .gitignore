@@ -6,3 +6,4 @@ vendor/
 web/bower_components
 web/bundles/*
 app/config/parameters.yml
+*.DS_Store

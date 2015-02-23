@@ -69,4 +69,36 @@ class GithubNeo4j
 
         return $result->get('count');
     }
+
+    public function getUserStats($userId)
+    {
+        $q = 'MATCH (user:User) WHERE user.id = {user_id}
+        MATCH (user)-[:LAST_EVENT|NEXT*]->(event)
+        RETURN event.type as eventType, count(*) as c';
+        $p = [
+            'user_id' => (int) $userId
+        ];
+
+        $result = $this->client->sendCypherQuery($q, $p)->getResult();
+        $stats = [];
+        $i = 0;
+        foreach ($result->get('eventType') as $event) {
+            $stats[$event] = $result->get('c')[$i];
+            $i++;
+        }
+
+        return $stats;
+    }
+
+    public function getRepositoriesIContributed($userId)
+    {
+        $q = 'MATCH (user:User) WHERE user.id = {user_id}
+        MATCH (user)-[:LAST_EVENT|NEXT*]->(event)
+        MATCH (event)-[:MERGED_PR|OPENED_PR]->(pr)-[:BASE]->()-[:BRANCH_OF]->(repo)
+        RETURN DISTINCT(repo.name) as repos';
+        $p = ['user_id' => $userId];
+        $result = $this->client->sendCypherQuery($q, $p)->getResult();
+
+        return $result->get('repos');
+    }
 }

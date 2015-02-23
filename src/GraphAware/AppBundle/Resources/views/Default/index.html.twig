@@ -16,6 +16,46 @@
 <hr />
 </div>
 
+    {% if is_granted('ROLE_USER') %}
+    <div class="col-sm-12 main">
+        <div class="row">
+            <h4>Your statistics</h4>
+            <h5>Query used :</h5>
+            <pre>
+                MATCH (user:User) WHERE user.login = '{{ app.user.login }}'
+                MATCH (user)-[:LAST_EVENT|NEXT*]->(event)
+                RETURN event.type as eventType, count(*) as counts
+            </pre>
+            <table class="table">
+                {% for index,value in stats %}
+                    <tr><td>{{ index }}</td><td>{{ value }}</td></tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <hr/>
+
+        <div class="row">
+            <h4>To which repositories have you contributed ?</h4>
+            <h5>Query used :</h5>
+            <pre>
+                MATCH (user:User) WHERE user.login = '{{ app.user.login }}'
+                MATCH (user)-[:LAST_EVENT|NEXT*]->(event)
+                MATCH (event)-[:MERGED_PR|OPENED_PR]->(pr)-[:BASE]->()-[:BRANCH_OF]->(repo)
+                RETURN collect(DISTINCT(repo.name)) as repos
+            </pre>
+            <table class="table">
+                {% for repo in repo_contrib %}
+                    <tr><td>{{ repo }}</td></tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <hr />
+
+    </div>
+    {% else %}
+
     <div class="col-sm-12 main">
         <div class="col-sm-4">
             <h4>Users Registered</h4>
@@ -32,5 +72,7 @@
             <p>{{ total_repos }}</p>
         </div>
     </div>
+
+    {% endif %}
 
 {% endblock %}

@@ -19,7 +19,9 @@ class DefaultController extends Controller
         return array(
             'active_users' => (int) $neogh->getActiveUsers(),
             'total_events' => (int) $neogh->getEventsCount(),
-            'total_repos' => (int) $neogh->getRepositoriesCount()
+            'total_repos' => (int) $neogh->getRepositoriesCount(),
+            'stats' => null !== $this->getUser() ? $neogh->getUserStats($this->getUser()->getGithubId()) : null,
+            'repo_contrib' => null !== $this->getUser() ? $neogh->getRepositoriesIContributed($this->getUser()->getGithubId()) : null
         );
     }
 

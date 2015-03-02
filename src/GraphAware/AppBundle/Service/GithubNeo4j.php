@@ -94,7 +94,8 @@ class GithubNeo4j
     {
         $q = 'MATCH (user:User) WHERE user.id = {user_id}
         MATCH (user)-[:LAST_EVENT|NEXT*]->(event)
-        MATCH (event)-[*1..5]->(repo:Repository)
+        MATCH (event)-[:MERGED_PR|OPENED_PR|PUSHED]->(step)
+        MATCH (step)-[*1..4]->(repo:Repository)
         RETURN DISTINCT(repo.name) as repos';
         $p = ['user_id' => $userId];
         $result = $this->client->sendCypherQuery($q, $p)->getResult();

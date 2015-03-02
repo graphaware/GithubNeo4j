@@ -18,7 +18,7 @@ parameters:
 
     # A secret key that's used to generate certain security-related tokens
     secret:            ThisTokenIsNotSoSecretChangeIt
-    gh_client_id: 
+    gh_client_id:
     gh_client_secret:
     gh_total_import_events: 200
     neo4j_host: localhost

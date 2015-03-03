@@ -41,7 +41,8 @@
             <pre>
                 MATCH (user:User) WHERE user.login = '{{ app.user.login }}'
                 MATCH (user)-[:LAST_EVENT|NEXT*]->(event)
-                MATCH (event)-[:MERGED_PR|OPENED_PR]->(pr)-[:BASE]->()-[:BRANCH_OF]->(repo)
+                MATCH (event)-[:MERGED_PR|OPENED_PR|PUSHED]->(step)
+                MATCH (step)-[*1..4]->(repo:Repository)
                 RETURN collect(DISTINCT(repo.name)) as repos
             </pre>
             <table class="table">

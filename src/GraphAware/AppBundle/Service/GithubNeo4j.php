@@ -80,6 +80,9 @@ class GithubNeo4j
         ];
 
         $result = $this->client->sendCypherQuery($q, $p)->getResult();
+        if (null === $result->get('eventType')) {
+          return null;
+        }
         $stats = [];
         $i = 0;
         foreach ($result->get('eventType') as $event) {
@@ -101,5 +104,20 @@ class GithubNeo4j
         $result = $this->client->sendCypherQuery($q, $p)->getResult();
 
         return $result->get('repos');
+    }
+
+    public function getHowIKnowOthers($userId)
+    {
+        $q = 'MATCH (user:User) WHERE user.id = {user_id}
+        MATCH (others:User) WHERE others <> user
+        WITH user, collect(others) as o
+        UNWIND o as other
+        MATCH p=shortestPath((user)-[*]-(other))
+        RETURN p';
+        $p = ['user_id' => $userId];
+        return $this->client->sendCypherQuery($q, $p)->getBody();
+        $result = $this->client->sendCypherQuery($q, $p)->getResult();
+
+        return $result->get('p');
     }
 }

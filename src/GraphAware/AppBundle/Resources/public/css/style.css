@@ -5,3 +5,7 @@ body {
 .main {
     text-align: center;
 }
+
+#popoto-graph {
+    height: 500px;
+}

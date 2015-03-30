@@ -74,6 +74,7 @@ swiftmailer:
 
 graph_aware_neo4j:
     auto_format_response: true
+    default_timeout: 500
     connections:
         default:
             scheme: http

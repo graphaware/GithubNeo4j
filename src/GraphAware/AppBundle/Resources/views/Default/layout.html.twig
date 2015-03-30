@@ -13,6 +13,7 @@
 
     <!-- Bootstrap core CSS -->
     <link href="/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/bundles/graphawareapp/css/popoto.min.css" rel="stylesheet">
     <link href="/bundles/graphawareapp/css/style.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -45,7 +46,7 @@
     </div>
 </nav>
 
-<div class="container">
+<div class="container-fluid">
 
     {% block content %} {% endblock %}
 
@@ -57,5 +58,9 @@
 <!-- Placed at the end of the document so the pages load faster -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/bundles/graphawareapp/js/d3.v3.min.js"></script>
+<script src="/bundles/graphawareapp/js/jquery-2.1.0.min.js"></script>
+<script src="/bundles/graphawareapp/js/popoto.js"></script>
+{% block js %} {% endblock %}
 </body>
 </html>

@@ -24,7 +24,7 @@
                 </div>
 
                 <div class="ppt-container-graph">
-                    <div id="popoto-graph" class="ppt-div-graph">
+                    <div id="popoto-graph" class="ppt-div-graph" user-graph-id="{{ app.user.githubId }}" user-graph-login="{{ app.user.login }}">
                         <!-- Graph will be generated here-->
                     </div>
                 </div>
@@ -95,285 +95,288 @@
 
 {% block js %}
     <script>
+        var userId = $('#popoto-graph').attr('user-graph-id');
+        if ('undefined' !== userId) {
+            var userLogin = $('#popoto-graph').attr('user-graph-login');
+            // Change this property to your running Neo4j server or GrapheneDB instance.
+            popoto.rest.CYPHER_URL = "http://localhost:7474/db/data/cypher";
+            // Add this property if your server requires basic HTTP authentication. If not just remove this line.
+            popoto.rest.AUTHORIZATION = "Basic " + btoa("neo4j:error");
 
-        // Change this property to your running Neo4j server or GrapheneDB instance.
-        popoto.rest.CYPHER_URL = "http://localhost:7474/db/data/cypher";
-        // Add this property if your server requires basic HTTP authentication. If not just remove this line.
-        popoto.rest.AUTHORIZATION = "Basic " + btoa("neo4j:error");
+            // logger level is set to INFO to see generated Cypher queries in console logs
+            // Change level or remove if not needed
+            popoto.logger.LEVEL = popoto.logger.LogLevels.INFO;
 
-        // logger level is set to INFO to see generated Cypher queries in console logs
-        // Change level or remove if not needed
-        popoto.logger.LEVEL = popoto.logger.LogLevels.INFO;
+            popoto.query.USE_PARENT_RELATION = true;
 
-        popoto.query.USE_PARENT_RELATION = true;
+            popoto.query.filterRelation = function (d) {
+                return d.relationship != "EVENT_TYPE";
+            };
 
-        popoto.query.filterRelation = function (d) {
-            return d.relationship != "EVENT_TYPE";
-        };
-
-        // Define the list of label provider to customize the graph behavior:
-        popoto.provider.nodeProviders = {
-            "User": {
-                "returnAttributes": ["id", "login"],
-                "constraintAttribute": "id",
-                "children": ["ActiveUser", "Organisation"], // Set sub type of user as child which will inherit from this config
-                // Text displayed in the node in graph
-                "getTextValue": function (node) {
-                    if (node.type === popoto.graph.node.NodeTypes.VALUE) { // The node is a selectable value
-                        return node.attributes.login; // Display the ActiveUser login
-                    } else { // The node is a choosable label
-                        if (node.value === undefined) { // with no value selected
-                            return node.label; // Display node label
-                        } else { // with value selected
-                            return node.value.attributes.login; // Display selected value login
+            // Define the list of label provider to customize the graph behavior:
+            popoto.provider.nodeProviders = {
+                "User": {
+                    "returnAttributes": ["id", "login"],
+                    "constraintAttribute": "id",
+                    "children": ["ActiveUser", "Organisation"], // Set sub type of user as child which will inherit from this config
+                    // Text displayed in the node in graph
+                    "getTextValue": function (node) {
+                        if (node.type === popoto.graph.node.NodeTypes.VALUE) { // The node is a selectable value
+                            return node.attributes.login; // Display the ActiveUser login
+                        } else { // The node is a choosable label
+                            if (node.value === undefined) { // with no value selected
+                                return node.label; // Display node label
+                            } else { // with value selected
+                                return node.value.attributes.login; // Display selected value login
+                            }
                         }
-                    }
-                },
-                "getImagePath": function (node) {
-                    if (node.type === popoto.graph.node.NodeTypes.VALUE) {
-                        return "css/image/node-yellow.png";
-                    } else {
-                        if (node.value === undefined) {
-                            if (node.type === popoto.graph.node.NodeTypes.ROOT) {
-                                return "bundles/graphawareapp/css/image/node-blue.png";
-                            }
-                            if (node.type === popoto.graph.node.NodeTypes.CHOOSE) {
-                                return "css/image/node-green.png";
-                            }
-                            if (node.type === popoto.graph.node.NodeTypes.GROUP) {
-                                return "css/image/node-black.png";
-                            }
+                    },
+                    "getImagePath": function (node) {
+                        if (node.type === popoto.graph.node.NodeTypes.VALUE) {
+                            return "css/image/node-yellow.png";
                         } else {
-                            return "bundles/graphawareapp/images/octocat.png";
+                            if (node.value === undefined) {
+                                if (node.type === popoto.graph.node.NodeTypes.ROOT) {
+                                    return "bundles/graphawareapp/css/image/node-blue.png";
+                                }
+                                if (node.type === popoto.graph.node.NodeTypes.CHOOSE) {
+                                    return "css/image/node-green.png";
+                                }
+                                if (node.type === popoto.graph.node.NodeTypes.GROUP) {
+                                    return "css/image/node-black.png";
+                                }
+                            } else {
+                                return "bundles/graphawareapp/images/octocat.png";
+                            }
                         }
+                    },
+                    "getDisplayType": function (node) {
+                        return popoto.provider.NodeDisplayTypes.IMAGE;
+                    },
+                    // Text displayed in the query viewer
+                    "getSemanticValue": function (node) {
+                        return popoto.provider.getTextValue(node);
+                    },
+                    // Result list customization:
+                    "displayResults": function (pElmt) {
+                        // only display an H3 element with user login
+                        pElmt.append("h3")
+                                .text(function (result) {
+                                    return result.attributes.login;
+                                });
                     }
                 },
-                "getDisplayType": function (node) {
-                    return popoto.provider.NodeDisplayTypes.IMAGE;
-                },
-                // Text displayed in the query viewer
-                "getSemanticValue": function (node) {
-                    return popoto.provider.getTextValue(node);
-                },
-                // Result list customization:
-                "displayResults": function (pElmt) {
-                    // only display an H3 element with user login
-                    pElmt.append("h3")
-                            .text(function (result) {
-                                return result.attributes.login;
-                            });
-                }
-            },
-            "Issue": {
-                "returnAttributes": ["id", "number", "title", "body"],
-                "constraintAttribute": "id",
-                "getTextValue": function (node) {
-                    if (node.type === popoto.graph.node.NodeTypes.VALUE) { // The node is a selectable value
-                        return node.attributes.title;
-                    } else { // The node is a choosable label
-                        if (node.value === undefined) { // with no value selected
-                            return node.label;
-                        } else { // with value selected
-                            return node.value.attributes.number;
+                "Issue": {
+                    "returnAttributes": ["id", "number", "title", "body"],
+                    "constraintAttribute": "id",
+                    "getTextValue": function (node) {
+                        if (node.type === popoto.graph.node.NodeTypes.VALUE) { // The node is a selectable value
+                            return node.attributes.title;
+                        } else { // The node is a choosable label
+                            if (node.value === undefined) { // with no value selected
+                                return node.label;
+                            } else { // with value selected
+                                return node.value.attributes.number;
+                            }
                         }
+                    },
+                    // Text displayed in the query viewer
+                    "getSemanticValue": function (node) {
+                        return popoto.provider.getTextValue(node);
+                    },
+                    "displayResults": function (pElmt) {
+                        pElmt.append("h3")
+                                .text(function (result) {
+                                    return "Issue " + result.attributes.number + ": " + result.attributes.title;
+                                });
+                        pElmt.append("p")
+                                .text(function (result) {
+                                    return result.attributes.body;
+                                });
                     }
                 },
-                // Text displayed in the query viewer
-                "getSemanticValue": function (node) {
-                    return popoto.provider.getTextValue(node);
-                },
-                "displayResults": function (pElmt) {
-                    pElmt.append("h3")
-                            .text(function (result) {
-                                return "Issue " + result.attributes.number + ": " + result.attributes.title;
-                            });
-                    pElmt.append("p")
-                            .text(function (result) {
-                                return result.attributes.body;
-                            });
-                }
-            },
-            "GithubEvent": {
-                "returnAttributes": ["id", "type"],
-                "constraintAttribute": "id",
-                // Add subtype of events as children which will also inherit this config
-                "children": ["CreateEvent", "IssuesEvent", "IssueCommentEvent", "PullRequestEvent", "PushEvent", "WatchEvent"],
-                "getTextValue": function (node) {
-                    if (node.type === popoto.graph.node.NodeTypes.VALUE) { // The node is a selectable value
-                        return node.attributes.type;
-                    } else { // The node is a choosable label
-                        if (node.value === undefined) { // with no value selected
-                            return node.label;
-                        } else { // with value selected
-                            return node.value.attributes.type;
+                "GithubEvent": {
+                    "returnAttributes": ["id", "type"],
+                    "constraintAttribute": "id",
+                    // Add subtype of events as children which will also inherit this config
+                    "children": ["CreateEvent", "IssuesEvent", "IssueCommentEvent", "PullRequestEvent", "PushEvent", "WatchEvent"],
+                    "getTextValue": function (node) {
+                        if (node.type === popoto.graph.node.NodeTypes.VALUE) { // The node is a selectable value
+                            return node.attributes.type;
+                        } else { // The node is a choosable label
+                            if (node.value === undefined) { // with no value selected
+                                return node.label;
+                            } else { // with value selected
+                                return node.value.attributes.type;
+                            }
                         }
+                    },
+                    // Text displayed in the query viewer
+                    "getSemanticValue": function (node) {
+                        return popoto.provider.getTextValue(node);
+                    },
+                    "displayResults": function (pElmt) {
+                        pElmt.append("h3")
+                                .text(function (result) {
+                                    return result.attributes.type + ": " + result.attributes.id;
+                                });
                     }
                 },
-                // Text displayed in the query viewer
-                "getSemanticValue": function (node) {
-                    return popoto.provider.getTextValue(node);
+                "Tag": {
+                    "returnAttributes": ["reference", "tag_name"],
+                    "constraintAttribute": "tag_name"
                 },
-                "displayResults": function (pElmt) {
-                    pElmt.append("h3")
-                            .text(function (result) {
-                                return result.attributes.type + ": " + result.attributes.id;
-                            });
-                }
-            },
-            "Tag": {
-                "returnAttributes": ["reference", "tag_name"],
-                "constraintAttribute": "tag_name"
-            },
-            "Branch": {
-                "returnAttributes": ["reference", "name"],
-                "constraintAttribute": "reference",
-                "displayResults": function (pElmt) {
-                    pElmt.append("h3")
-                            .text(function (result) {
-                                return result.attributes.reference;
-                            });
+                "Branch": {
+                    "returnAttributes": ["reference", "name"],
+                    "constraintAttribute": "reference",
+                    "displayResults": function (pElmt) {
+                        pElmt.append("h3")
+                                .text(function (result) {
+                                    return result.attributes.reference;
+                                });
 
-                    pElmt.filter(function (result) {
-                        // Filter on attribute having name attribute value
-                        return result.attributes.name;
-                    }).append("span").text(function (result) {
-                        return "name: " + result.attributes.name;
-                    });
-                },
-                "getImagePath": function (node) {
-                    if (node.type === popoto.graph.node.NodeTypes.VALUE) {
-                        return "bundles/graphawareapp/images/branch.png";
-                    } else {
-                        if (node.value === undefined) {
-                            if (node.type === popoto.graph.node.NodeTypes.ROOT) {
-                                return "bundles/graphawareapp/images/branch.png";
-                            }
-                            if (node.type === popoto.graph.node.NodeTypes.CHOOSE) {
-                                return "bundles/graphawareapp/images/branch.png";
-                            }
-                            if (node.type === popoto.graph.node.NodeTypes.GROUP) {
-                                return "bundles/graphawareapp/images/branch.png";
-                            }
-                        } else {
+                        pElmt.filter(function (result) {
+                            // Filter on attribute having name attribute value
+                            return result.attributes.name;
+                        }).append("span").text(function (result) {
+                            return "name: " + result.attributes.name;
+                        });
+                    },
+                    "getImagePath": function (node) {
+                        if (node.type === popoto.graph.node.NodeTypes.VALUE) {
                             return "bundles/graphawareapp/images/branch.png";
-                        }
-                    }
-                },
-                "getDisplayType": function (node) {
-                    return popoto.provider.NodeDisplayTypes.IMAGE;
-                }
-            },
-            "EventType": {
-                "returnAttributes": ["type"],
-                "constraintAttribute": "type"
-            },
-            "Repository": {
-                "returnAttributes": ["id", "name"],
-                "constraintAttribute": "id",
-                "getTextValue": function (node) {
-                    if (node.type === popoto.graph.node.NodeTypes.VALUE) { // The node is a selectable value
-                        return node.attributes.name;
-                    } else { // The node is a choosable label
-                        if (node.value === undefined) { // with no value selected
-                            return node.label;
-                        } else { // with value selected
-                            return node.value.attributes.name;
-                        }
-                    }
-                },
-                // Text displayed in the query viewer
-                "getSemanticValue": function (node) {
-                    return popoto.provider.getTextValue(node);
-                },
-                "getImagePath": function (node) {
-                    if (node.type === popoto.graph.node.NodeTypes.VALUE) {
-                        return "bundles/graphawareapp/css/image/node-blue.png";
-                    } else {
-                        if (node.value === undefined) {
-                            if (node.type === popoto.graph.node.NodeTypes.ROOT) {
-                                return "bundles/graphawareapp/css/image/node-blue.png";
+                        } else {
+                            if (node.value === undefined) {
+                                if (node.type === popoto.graph.node.NodeTypes.ROOT) {
+                                    return "bundles/graphawareapp/images/branch.png";
+                                }
+                                if (node.type === popoto.graph.node.NodeTypes.CHOOSE) {
+                                    return "bundles/graphawareapp/images/branch.png";
+                                }
+                                if (node.type === popoto.graph.node.NodeTypes.GROUP) {
+                                    return "bundles/graphawareapp/images/branch.png";
+                                }
+                            } else {
+                                return "bundles/graphawareapp/images/branch.png";
                             }
-                            if (node.type === popoto.graph.node.NodeTypes.CHOOSE) {
+                        }
+                    },
+                    "getDisplayType": function (node) {
+                        return popoto.provider.NodeDisplayTypes.IMAGE;
+                    }
+                },
+                "EventType": {
+                    "returnAttributes": ["type"],
+                    "constraintAttribute": "type"
+                },
+                "Repository": {
+                    "returnAttributes": ["id", "name"],
+                    "constraintAttribute": "id",
+                    "getTextValue": function (node) {
+                        if (node.type === popoto.graph.node.NodeTypes.VALUE) { // The node is a selectable value
+                            return node.attributes.name;
+                        } else { // The node is a choosable label
+                            if (node.value === undefined) { // with no value selected
+                                return node.label;
+                            } else { // with value selected
+                                return node.value.attributes.name;
+                            }
+                        }
+                    },
+                    // Text displayed in the query viewer
+                    "getSemanticValue": function (node) {
+                        return popoto.provider.getTextValue(node);
+                    },
+                    "getImagePath": function (node) {
+                        if (node.type === popoto.graph.node.NodeTypes.VALUE) {
+                            return "bundles/graphawareapp/css/image/node-blue.png";
+                        } else {
+                            if (node.value === undefined) {
+                                if (node.type === popoto.graph.node.NodeTypes.ROOT) {
+                                    return "bundles/graphawareapp/css/image/node-blue.png";
+                                }
+                                if (node.type === popoto.graph.node.NodeTypes.CHOOSE) {
+                                    return "bundles/graphawareapp/images/repo3.png";
+                                }
+                                if (node.type === popoto.graph.node.NodeTypes.GROUP) {
+                                    return "css/image/node-black.png";
+                                }
+                            } else {
                                 return "bundles/graphawareapp/images/repo3.png";
                             }
-                            if (node.type === popoto.graph.node.NodeTypes.GROUP) {
-                                return "css/image/node-black.png";
-                            }
-                        } else {
-                            return "bundles/graphawareapp/images/repo3.png";
                         }
+                    },
+                    "getDisplayType": function (node) {
+                        return popoto.provider.NodeDisplayTypes.IMAGE;
+                    },
+                    "displayResults": function (pElmt) {
+                        pElmt.append("h3")
+                                .text(function (result) {
+                                    return result.attributes.name;
+                                });
                     }
                 },
-                "getDisplayType": function (node) {
-                    return popoto.provider.NodeDisplayTypes.IMAGE;
+                "PullRequest": {
+                    "returnAttributes": ["id", "number", "title", "body"],
+                    "constraintAttribute": "id"
                 },
-                "displayResults": function (pElmt) {
-                    pElmt.append("h3")
-                            .text(function (result) {
-                                return result.attributes.name;
-                            });
-                }
-            },
-            "PullRequest": {
-                "returnAttributes": ["id", "number", "title", "body"],
-                "constraintAttribute": "id"
-            },
-            "Push": {
-                "returnAttributes": ["id"],
-                "constraintAttribute": "id"
-            },
-            "Commit": {
-                "returnAttributes": ["sha", "message"],
-                "constraintAttribute": "sha",
-                "displayResults": function (pElmt) {
-                    pElmt.append("h3")
-                            .text(function (result) {
-                                return result.attributes.sha;
-                            });
-                    pElmt.append("span")
-                            .text(function (result) {
-                                return result.attributes.message;
-                            });
-                }
-            },
-            "IssueComment": {
-                "returnAttributes": ["id", "body"],
-                "constraintAttribute": "id",
-                "displayResults": function (pElmt) {
-                    pElmt.append("h3")
-                            .text(function (result) {
-                                return result.attributes.id;
-                            });
-                    pElmt.append("span")
-                            .text(function (result) {
-                                return result.attributes.body;
-                            });
-                }
-            }
-        };
-
-        // Add a listener on returned result count to update count in page
-        popoto.result.onTotalResultCount(function (count) {
-            d3.select("#result-total-count").text(function (d) {
-                return "(" + count + ")";
-            })
-        });
-        
-        popoto.graph.on("root.node.add", function (rootNode) {
-            rootNode.value = {
-                attributes: {
-                    count: 1,
-                    id: 1222009,
-                    login: "ikwattro"
+                "Push": {
+                    "returnAttributes": ["id"],
+                    "constraintAttribute": "id"
                 },
-                type: popoto.graph.node.NodeTypes.VALUE,
-                label: "User"
+                "Commit": {
+                    "returnAttributes": ["sha", "message"],
+                    "constraintAttribute": "sha",
+                    "displayResults": function (pElmt) {
+                        pElmt.append("h3")
+                                .text(function (result) {
+                                    return result.attributes.sha;
+                                });
+                        pElmt.append("span")
+                                .text(function (result) {
+                                    return result.attributes.message;
+                                });
+                    }
+                },
+                "IssueComment": {
+                    "returnAttributes": ["id", "body"],
+                    "constraintAttribute": "id",
+                    "displayResults": function (pElmt) {
+                        pElmt.append("h3")
+                                .text(function (result) {
+                                    return result.attributes.id;
+                                });
+                        pElmt.append("span")
+                                .text(function (result) {
+                                    return result.attributes.body;
+                                });
+                    }
+                }
             };
-            rootNode.immutable = true;
-        });
 
-        // Start the generation using User as root label of the query.
-        popoto.start("User");
+            // Add a listener on returned result count to update count in page
+            popoto.result.onTotalResultCount(function (count) {
+                d3.select("#result-total-count").text(function (d) {
+                    return "(" + count + ")";
+                })
+            });
+
+            popoto.graph.on("root.node.add", function (rootNode) {
+                rootNode.value = {
+                    attributes: {
+                        count: 1,
+                        id: userId,
+                        login: userLogin
+                    },
+                    type: popoto.graph.node.NodeTypes.VALUE,
+                    label: "User"
+                };
+                rootNode.immutable = true;
+            });
+
+            // Start the generation using User as root label of the query.
+            popoto.start("User");
+        }
 
     </script>
 {% endblock %}

@@ -7,5 +7,17 @@ body {
 }
 
 #popoto-graph {
-    height: 500px;
+    height: 750px;
+}
+
+.ppt-svg-graph {
+    height: 750px;
+}
+
+.ppt-container-graph, #popoto-graph {
+    background-color: inherit;
+}
+
+title {
+    color: #000;
 }

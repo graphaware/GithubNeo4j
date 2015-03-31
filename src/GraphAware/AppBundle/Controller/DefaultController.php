@@ -15,10 +15,6 @@ class DefaultController extends Controller
     public function indexAction()
     {
         $neogh = $this->get('ga.github_neo');
-        //echo '<pre>';
-
-        //print_r($neogh->getHowIKnowOthers($this->getUser()->getGithubId()));
-        //exit();
 
         return array(
             'active_users' => (int) $neogh->getActiveUsers(),

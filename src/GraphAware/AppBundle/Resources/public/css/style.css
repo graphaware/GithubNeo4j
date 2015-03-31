@@ -21,3 +21,7 @@ body {
 title {
     color: #000;
 }
+
+.ppt-node-text-root, .ppt-node-text-choose, .ppt-node-text-value, .ppt-node-text-group {
+    color: #000000;
+}

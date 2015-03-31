@@ -95,13 +95,13 @@
 
 {% block js %}
     <script>
-        var userId = $('#popoto-graph').attr('user-graph-id');
-        if ('undefined' !== userId) {
+        var userId = parseInt($('#popoto-graph').attr('user-graph-id'));
+        if ('undefined' != userId) {
             var userLogin = $('#popoto-graph').attr('user-graph-login');
             // Change this property to your running Neo4j server or GrapheneDB instance.
-            popoto.rest.CYPHER_URL = "http://108.61.209.152:7874/db/data/cypher";
+            popoto.rest.CYPHER_URL = "http://localhost:7874/db/data/cypher";
             // Add this property if your server requires basic HTTP authentication. If not just remove this line.
-            popoto.rest.AUTHORIZATION = "Basic " + btoa("neo4j:error");
+            //popoto.rest.AUTHORIZATION = "Basic " + btoa("neo4j:error");
 
             // logger level is set to INFO to see generated Cypher queries in console logs
             // Change level or remove if not needed
@@ -362,6 +362,7 @@
             });
 
             popoto.graph.on("root.node.add", function (rootNode) {
+                console.log(userId);
                 rootNode.value = {
                     attributes: {
                         count: 1,

@@ -99,7 +99,7 @@
         if ('undefined' !== userId) {
             var userLogin = $('#popoto-graph').attr('user-graph-login');
             // Change this property to your running Neo4j server or GrapheneDB instance.
-            popoto.rest.CYPHER_URL = "http://localhost:7874/db/data/cypher";
+            popoto.rest.CYPHER_URL = "http://http://108.61.209.152:7874/db/data/cypher";
             // Add this property if your server requires basic HTTP authentication. If not just remove this line.
             popoto.rest.AUTHORIZATION = "Basic " + btoa("neo4j:error");
 

@@ -31,8 +31,6 @@
             </section>
         </div>
 
-        <div id="popoto-cypher"></div>
-
 
     <div class="col-sm-12 main">
         <div class="row">
@@ -108,7 +106,6 @@
             // logger level is set to INFO to see generated Cypher queries in console logs
             // Change level or remove if not needed
             popoto.logger.LEVEL = popoto.logger.LogLevels.INFO;
-            popoto.logger.TRACE = true;
 
             popoto.query.USE_PARENT_RELATION = true;
 
@@ -140,7 +137,7 @@
                         } else {
                             if (node.value === undefined) {
                                 if (node.type === popoto.graph.node.NodeTypes.ROOT) {
-                                    return "bundles/graphawareapp/css/image/node-blue.png";
+                                    return "/bundles/graphawareapp/css/image/node-blue.png";
                                 }
                                 if (node.type === popoto.graph.node.NodeTypes.CHOOSE) {
                                     return "css/image/node-green.png";
@@ -149,7 +146,7 @@
                                     return "css/image/node-black.png";
                                 }
                             } else {
-                                return "bundles/graphawareapp/images/octocat.png";
+                                return "/bundles/graphawareapp/images/octocat.png";
                             }
                         }
                     },
@@ -242,25 +239,26 @@
                             // Filter on attribute having name attribute value
                             return result.attributes.name;
                         }).append("span").text(function (result) {
+                            console.log(result);
                             return "name: " + result.attributes.name;
                         });
                     },
                     "getImagePath": function (node) {
                         if (node.type === popoto.graph.node.NodeTypes.VALUE) {
-                            return "bundles/graphawareapp/images/branch.png";
+                            return "/bundles/graphawareapp/images/branch.png";
                         } else {
                             if (node.value === undefined) {
                                 if (node.type === popoto.graph.node.NodeTypes.ROOT) {
-                                    return "bundles/graphawareapp/images/branch.png";
+                                    return "/bundles/graphawareapp/images/branch.png";
                                 }
                                 if (node.type === popoto.graph.node.NodeTypes.CHOOSE) {
-                                    return "bundles/graphawareapp/images/branch.png";
+                                    return "/bundles/graphawareapp/images/branch.png";
                                 }
                                 if (node.type === popoto.graph.node.NodeTypes.GROUP) {
-                                    return "bundles/graphawareapp/images/branch.png";
+                                    return "/bundles/graphawareapp/images/branch.png";
                                 }
                             } else {
-                                return "bundles/graphawareapp/images/branch.png";
+                                return "/bundles/graphawareapp/images/branch.png";
                             }
                         }
                     },
@@ -292,20 +290,20 @@
                     },
                     "getImagePath": function (node) {
                         if (node.type === popoto.graph.node.NodeTypes.VALUE) {
-                            return "bundles/graphawareapp/css/image/node-blue.png";
+                            return "/bundles/graphawareapp/css/image/node-blue.png";
                         } else {
                             if (node.value === undefined) {
                                 if (node.type === popoto.graph.node.NodeTypes.ROOT) {
-                                    return "bundles/graphawareapp/css/image/node-blue.png";
+                                    return "/bundles/graphawareapp/css/image/node-blue.png";
                                 }
                                 if (node.type === popoto.graph.node.NodeTypes.CHOOSE) {
-                                    return "bundles/graphawareapp/images/repo3.png";
+                                    return "/bundles/graphawareapp/images/repo3.png";
                                 }
                                 if (node.type === popoto.graph.node.NodeTypes.GROUP) {
                                     return "css/image/node-black.png";
                                 }
                             } else {
-                                return "bundles/graphawareapp/images/repo3.png";
+                                return "/bundles/graphawareapp/images/repo3.png";
                             }
                         }
                     },

@@ -1,21 +1,31 @@
+html {
+    background-color: #233445;
+    font-family: Roboto, arial, sans-serif;
+}
+
 body {
     padding-top: 50px;
+    background-color: #233445;
 }
 
-.main {
+h1, h2, h3, h4, h5, h6, p, a {
+    Roboto, arial, sans-serif;
+}
+
+h1.splashTitle {
+    font-family: Roboto, arial, sans-serif;
+    font-size: 38px;
+    line-height: 1;
+    font-weight: bold;
+    letter-spacing: -1px;
+}
+
+.shadowed {
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15);
+}
+
+.center {
     text-align: center;
-}
-
-#popoto-graph {
-    height: 750px;
-}
-
-.ppt-svg-graph {
-    height: 750px;
-}
-
-.ppt-container-graph, #popoto-graph {
-    background-color: #febfa2;
 }
 
 title {
@@ -23,5 +33,170 @@ title {
 }
 
 .ppt-node-text-root, .ppt-node-text-choose, .ppt-node-text-value, .ppt-node-text-group {
-    color: #000000;
+    fill: #000000;
+}
+
+.navbar {
+    padding-left: 15px;
+    padding-right: 15px;
+    background-color: #f5f5f5;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15);
+    border-bottom: none;
+}
+
+.navbar-brand {
+    height: inherit;
+    padding:0px;
+}
+
+a.navbar-brand img {
+    padding-top: 5px;
+}
+
+.center {
+    margin: 0 auto;
+}
+
+.white {
+    background-color: #e9f0f5;
+}
+
+.text-white {
+    color: white;
+}
+
+.login {
+    padding-top: 30px;
+}
+
+h2.number {
+    font-size: 50px;
+    font-weight: bold;
+}
+
+.stat p {
+    font-size: 24px;
+}
+
+.usersCount {
+    color: #ec2166;
+}
+
+.reposCount {
+    color: #3DA490;
+}
+
+.eventsCount {
+    color: #91C969;
+}
+
+.relCount {
+    color: #FB8807;
+}
+
+.stats-counter {
+    margin-top: 20px;
+}
+
+.navbar-brand a img {
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15);
+}
+
+.content {
+    padding-top: 40px;
+    min-height: 500px;
+}
+
+.nav-stacked.leftmenu {
+    background-color: #fff;
+    padding: 10px;
+}
+
+.userProfile {
+    margin-bottom: 20px;
+    background-color: #fff;
+}
+
+.user-info {
+    padding: 10px;
+    margin-top: -75px;
+}
+
+.user-info a h4 {
+    color: #3DA490;
+}
+
+.borderline {
+    min-height: 100px;
+    background: url('../images/userbg.png') no-repeat;
+    background-position: 0px -75px;
+}
+
+.ghimg {
+    position: relative;
+    left: 100px;
+    top: -75px;
+}
+
+.nav-stacked.leftmenu > li.active > a {
+    background-color: transparent;
+    color: #ec2166;
+}
+
+.nav-stacked > li.active {
+    border-left: 1px solid #ec2166;
+}
+
+.nav-stacked > li > a {
+    padding-top: 5px;
+    padding-right: 15px;
+    padding-bottom: 5px;
+    padding-left: 15px;
+}
+
+.nav-stacked.leftmenu > li > a {
+    font-size: 16px;
+}
+
+.nav-stacked > li {
+    margin-bottom: 5px;
+}
+
+.showcase {
+    margin-right: 5px;
+    margin-left: 15px;
+}
+
+.superwhite {
+    background-color: #fff;
+}
+
+#left-menu {
+    position: fixed;
+}
+
+pre {
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 24px;
+    text-align: left;
+    border: none;
+}
+
+pre.prettyprint {
+    padding: 10px;
+    border: none;
+    background-color: transparent;
+}
+
+.vqDisplay {
+    margin-top: 15px;
+}
+
+.showcase {
+    margin-bottom: 25px;
+}
+
+p.queryTip {
+    font-size: 14px;
 }

@@ -54,6 +54,22 @@ class GithubNeo4j
         return $result->get('count');
     }
 
+    public function getUsersCount()
+    {
+        $q = 'MATCH (user:User) RETURN count(user) as count';
+        $result = $this->client->sendCypherQuery($q)->getResult();
+
+        return $result->get('count');
+    }
+
+    public function getRelsCount()
+    {
+        $q = 'MATCH (n) OPTIONAL MATCH (n)-[r]-() RETURN count(r) as c';
+        $result = $this->client->sendCypherQuery($q)->getResult();
+
+        return $result->get('c');
+    }
+
     public function getEventsCount()
     {
         $q = 'MATCH (event:GithubEvent) RETURN count(event) as count';
@@ -73,30 +89,21 @@ class GithubNeo4j
     public function getUserStats($userId)
     {
         $q = 'MATCH (user:User) WHERE user.id = {user_id}
-        MATCH (user)-[:LAST_EVENT|NEXT*]->(event)
+        MATCH (user)-[:LAST_EVENT|PREVIOUS_EVENT*]->(event)
         RETURN event.type as eventType, count(*) as c';
         $p = [
             'user_id' => (int) $userId
         ];
 
         $result = $this->client->sendCypherQuery($q, $p)->getResult();
-        if (null === $result->get('eventType')) {
-          return null;
-        }
-        $stats = [];
-        $i = 0;
-        foreach ($result->get('eventType') as $event) {
-            $stats[$event] = $result->get('c')[$i];
-            $i++;
-        }
 
-        return $stats;
+        return $result->getTableFormat();
     }
 
     public function getRepositoriesIContributed($userId)
     {
         $q = 'MATCH (user:User) WHERE user.id = {user_id}
-        MATCH (user)-[:LAST_EVENT|NEXT*]->(event)
+        MATCH (user)-[:LAST_EVENT|PREVIOUS_EVENT*]->(event)
         MATCH (event)-[:MERGED_PR|OPENED_PR|PUSHED]->(step)
         MATCH (step)-[*1..4]->(repo:Repository)
         RETURN DISTINCT(repo.name) as repos';
@@ -119,5 +126,44 @@ class GithubNeo4j
         $result = $this->client->sendCypherQuery($q, $p)->getResult();
 
         return $result->get('p');
+    }
+
+    public function getUserId($username)
+    {
+        $user = trim($username);
+        $q = 'MATCH (user:ActiveUser {login: {user}}) RETURN user.id as uid';
+
+        return $this->client->sendCypherQuery($q, ['user' => $user])->getResult()->get('uid');
+    }
+
+    public function getUserEventsCountDetailed($user)
+    {
+        $q = 'MATCH (user:User {login: {user}})
+        MATCH (user)-[:LAST_EVENT|:PREVIOUS_EVENT*]->(event)
+        RETURN event.type as type, count(*) as count';
+
+        return $this->client->sendCypherQuery($q, ['user' => $user])->getResult()->getTableFormat();
+    }
+
+    public function getUserEventsCount($user)
+    {
+        $q = 'MATCH (user:User {login: {user}})
+        MATCH (user)-[:LAST_EVENT|:PREVIOUS_EVENT*]->(event)
+        RETURN count(event) as c';
+
+        return $this->client->sendCypherQuery($q, ['user' => $user])->getResult()->get('c');
+    }
+
+    public function getUserEventsDayDiff($user)
+    {
+        $q = 'MATCH (n:User {login: {user}})
+MATCH (n)-[:LAST_EVENT]-(lastEvent)-[:PREVIOUS_EVENT*0..]->(event)
+WITH collect(event) as events
+WITH events[0] as last, events[size(events)-1] as first
+MATCH (last)-[:EVENT_TIME]->(day), (first)-[:EVENT_TIME]->(day2)
+MATCH p=shortestPath((day2)-[r:NEXT*..365]->(day))
+RETURN length(r) as count';
+
+        return $this->client->sendCypherQuery($q, ['user' => $user])->getResult()->get('count');
     }
 }

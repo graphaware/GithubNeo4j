@@ -1,0 +1,58 @@
+<div class="col-sm-12 superwhite showcase showcase0 shadowed topBordered">
+    <div class="row">
+        <div class="col-sm-12 stat">
+            <div>
+                <div class="row">
+                    <div class="col-sm-3 text-center vqHolder">
+                        <h2 class="number eventsCount">{{ count }}</h2>
+                        <p>Events</p>
+                        <p class="queryTip">Total events registered for your account</p>
+                    </div>
+                    <div class="col-sm-8 vqDisplay">
+
+                        <div role="tabpanel">
+
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Result</a></li>
+                                <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Query</a></li>
+                            </ul>
+
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane active" id="home">
+                                    <table class="table-striped table">
+                                        <thead>
+                                        <tr>
+                                            {% for k in keys %}
+                                                <th>{{ k }}</th>
+                                            {% endfor %}
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for event in events %}
+                                            <tr>
+                                                <td>{{ event.type }}</td>
+                                                <td>{{ event.count }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div role="tabpanel" class="tab-pane" id="profile">
+                                                                                                <pre class="prettyprint">
+MATCH (n:ActiveUser {login: '{{ user }}'})
+MATCH (n)-[:LAST_EVENT|:PREVIOUS_EVENT*]->(event)
+RETURN event.type as type, count(*) as count
+                                            </pre>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

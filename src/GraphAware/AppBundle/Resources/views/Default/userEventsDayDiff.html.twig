@@ -1,0 +1,48 @@
+<div class="col-sm-12 superwhite showcase showcase0 shadowed topBordered">
+    <div class="row">
+        <div class="col-sm-12 stat">
+            <div>
+                <div class="row">
+                    <div class="col-sm-3 text-center vqHolder">
+                        <h2 class="number eventsCount">{{ count }}</h2>
+                        <p>Days</p>
+                        <p class="queryTip">Between your last and first event registered</p>
+                    </div>
+                    <div class="col-sm-8 vqDisplay">
+
+                        <div role="tabpanel">
+
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" class="active"><a href="#home1" aria-controls="home1" role="tab" data-toggle="tab">Model</a></li>
+                                <li role="presentation"><a href="#profile1" aria-controls="profile1" role="tab" data-toggle="tab">Query</a></li>
+                            </ul>
+
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane active" id="home1">
+                                    <p class="text-center">
+                                        <img src="{{ asset('bundles/graphawareapp/images/daysdiff.png') }}"/>
+                                    </p>
+                                </div>
+                                <div role="tabpanel" class="tab-pane" id="profile1">
+                                     <pre class="prettyprint">
+MATCH (n:User {login: '{{ user }}')
+MATCH (n)-[:LAST_EVENT]-(lastEvent)-[:PREVIOUS_EVENT*0..]->(event)
+WITH collect(event) as events
+WITH events[0] as last, events[size(events)-1] as first
+MATCH (last)-[:EVENT_TIME]->(day), (first)-[:EVENT_TIME]->(day2)
+MATCH p=shortestPath((day2)-[:NEXT*..365]->(day))
+RETURN length(p) as count
+                                     </pre>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -34,9 +34,11 @@ security:
                     oauth:
                         resource_owners:
                             github:          "/login/check-github"
-                        login_path:        /login
+                        login_path:        /
                         use_forward:       false
                         failure_path:      /login
+                        always_use_default_target_path: false
+                        default_target_path:            /me
 
                         oauth_user_provider:
                             service: ga.user_provider

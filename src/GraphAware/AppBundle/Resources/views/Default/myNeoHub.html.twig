@@ -1,0 +1,146 @@
+{% extends "GraphAwareAppBundle:Default:fluid.html.twig" %}
+
+{% block inside %}
+
+    <div class="row white content">
+        <div class="col-sm-2" id="left-menu">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="shadowed userProfile">
+                        <div class="borderline"></div>
+                        <img class="ghimg" src="{{ asset('bundles/graphawareapp/images/usergh.png') }}"/>
+                        <div class="user-info">
+                            <a href="https://github.com/{{ user.property('login') }}">
+                                <h4 class="text-center">@{{ user.property('login') }}</h4>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12">
+                    <ul class="nav nav-pills nav-stacked leftmenu shadowed">
+                        <li role="presentation"><a href="#">Some Stats</a> </li>
+                        <li role="presentation" class="active"><a href="#">My Github Timeline</a></li>
+                        <li role="presentation"><a href="#">Events</a></li>
+                        <li role="presentation"><a href="#">Connections</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-9" id="right-box">
+            <div class="row">
+                {{ render(controller('GraphAwareAppBundle:Default:userEventsCountDetailed')) }}
+
+                {{ render(controller('GraphAwareAppBundle:Default:userEventsDayDiff')) }}
+
+                <div class="col-sm-12 showcase showcase1">
+
+                    <h2 class="text-center">Your Github Timeline</h2>
+
+                    <section id="cd-timeline" class="cd-container">
+                        <div class="cd-timeline-block">
+                            <div class="cd-timeline-img cd-picture">
+                                <img src="/bundles/graphawareapp/css/img/cd-icon-picture.svg" alt="Picture">
+                            </div> <!-- cd-timeline-img -->
+
+                            <div class="cd-timeline-content">
+                                <h2>PullRequest</h2>
+                                <span class="cd-date">Jan 14</span>
+                            </div> <!-- cd-timeline-content -->
+                        </div> <!-- cd-timeline-block -->
+
+                        <div class="cd-timeline-block">
+                            <div class="cd-timeline-img cd-movie">
+                                <img src="/bundles/graphawareapp/css/img/cd-icon-movie.svg" alt="Movie">
+                            </div> <!-- cd-timeline-img -->
+
+                            <div class="cd-timeline-content">
+                                <h2>Title of section 2</h2>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto, optio, dolorum provident rerum aut hic quasi placeat iure tempora laudantium ipsa ad debitis unde?</p>
+                                <a href="#0" class="cd-read-more">Read more</a>
+                                <span class="cd-date">Jan 18</span>
+                            </div> <!-- cd-timeline-content -->
+                        </div> <!-- cd-timeline-block -->
+
+                        <div class="cd-timeline-block">
+                            <div class="cd-timeline-img cd-picture">
+                                <img src="/bundles/graphawareapp/css/img/cd-icon-picture.svg" alt="Picture">
+                            </div> <!-- cd-timeline-img -->
+
+                            <div class="cd-timeline-content">
+                                <h2>Title of section 3</h2>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Excepturi, obcaecati, quisquam id molestias eaque asperiores voluptatibus cupiditate error assumenda delectus odit similique earum voluptatem doloremque dolorem ipsam quae rerum quis. Odit, itaque, deserunt corporis vero ipsum nisi eius odio natus ullam provident pariatur temporibus quia eos repellat consequuntur perferendis enim amet quae quasi repudiandae sed quod veniam dolore possimus rem voluptatum eveniet eligendi quis fugiat aliquam sunt similique aut adipisci.</p>
+                                <a href="#0" class="cd-read-more">Read more</a>
+                                <span class="cd-date">Jan 24</span>
+                            </div> <!-- cd-timeline-content -->
+                        </div> <!-- cd-timeline-block -->
+
+                        <div class="cd-timeline-block">
+                            <div class="cd-timeline-img cd-location">
+                                <img src="/bundles/graphawareapp/css/img/cd-icon-location.svg" alt="Location">
+                            </div> <!-- cd-timeline-img -->
+
+                            <div class="cd-timeline-content">
+                                <h2>Title of section 4</h2>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto, optio, dolorum provident rerum aut hic quasi placeat iure tempora laudantium ipsa ad debitis unde? Iste voluptatibus minus veritatis qui ut.</p>
+                                <a href="#0" class="cd-read-more">Read more</a>
+                                <span class="cd-date">Feb 14</span>
+                            </div> <!-- cd-timeline-content -->
+                        </div> <!-- cd-timeline-block -->
+
+                        <div class="cd-timeline-block">
+                            <div class="cd-timeline-img cd-location">
+                                <img src="/bundles/graphawareapp/css/img/cd-icon-location.svg" alt="Location">
+                            </div> <!-- cd-timeline-img -->
+
+                            <div class="cd-timeline-content">
+                                <h2>Title of section 5</h2>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto, optio, dolorum provident rerum.</p>
+                                <a href="#0" class="cd-read-more">Read more</a>
+                                <span class="cd-date">Feb 18</span>
+                            </div> <!-- cd-timeline-content -->
+                        </div> <!-- cd-timeline-block -->
+
+                        <div class="cd-timeline-block">
+                            <div class="cd-timeline-img cd-movie">
+                                <img src="/bundles/graphawareapp/css/img/cd-icon-movie.svg" alt="Movie">
+                            </div> <!-- cd-timeline-img -->
+
+                            <div class="cd-timeline-content">
+                                <h2>Final Section</h2>
+                                <p>This is the content of the last section</p>
+                                <span class="cd-date">Feb 26</span>
+                            </div> <!-- cd-timeline-content -->
+                        </div> <!-- cd-timeline-block -->
+                    </section> <!-- cd-timeline -->
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            var ghiMax = $('.userProfile').width();
+            var ghiL = (ghiMax - 100) / 2;
+            var img = $('img.ghimg');
+            $('img.ghimg').css('left', ghiL);
+        });
+
+        $('.leftmenu > li').click(function(e){
+            var elt = e.target.closest('li');
+            $('.leftmenu > li.active').removeClass('active');
+            $(elt).addClass('active');
+        });
+
+        var lmW = $('#left-menu').width();
+        $('#right-box').css('margin-left', lmW+75);
+        prettyPrint();
+    </script>
+
+{% endblock %}

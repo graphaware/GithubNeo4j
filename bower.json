@@ -1,0 +1,22 @@
+{
+  "name": "github-demo",
+  "version": "0.0.0",
+  "homepage": "https://github.com/graphaware/GithubNeo4j",
+  "authors": [
+    "Christophe Willemsen <willemsen.christophe@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "web/bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.3.2",
+    "google-code-prettify": "~1.0.4",
+    "odometer": "~0.4.7"
+  }
+}

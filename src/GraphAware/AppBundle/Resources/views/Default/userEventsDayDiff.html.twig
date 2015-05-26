@@ -31,9 +31,7 @@ MATCH (n:User {login: '{{ user }}')
 MATCH (n)-[:LAST_EVENT]-(lastEvent)-[:PREVIOUS_EVENT*0..]->(event)
 WITH collect(event) as events
 WITH events[0] as last, events[size(events)-1] as first
-MATCH (last)-[:EVENT_TIME]->(day), (first)-[:EVENT_TIME]->(day2)
-MATCH p=shortestPath((day2)-[:NEXT*..365]->(day))
-RETURN length(p) as count
+RETURN (last.time - first.time) / 86400000 as count
                                      </pre>
                                 </div>
                             </div>

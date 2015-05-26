@@ -160,9 +160,7 @@ class GithubNeo4j
 MATCH (n)-[:LAST_EVENT]-(lastEvent)-[:PREVIOUS_EVENT*0..]->(event)
 WITH collect(event) as events
 WITH events[0] as last, events[size(events)-1] as first
-MATCH (last)-[:EVENT_TIME]->(day), (first)-[:EVENT_TIME]->(day2)
-MATCH p=shortestPath((day2)-[r:NEXT*..365]->(day))
-RETURN length(r) as count';
+RETURN (last.time - first.time) / 86400000 as count';
 
         return $this->client->sendCypherQuery($q, ['user' => $user])->getResult()->get('count');
     }

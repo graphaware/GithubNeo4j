@@ -1,0 +1,63 @@
+/* Grafikon Styles */
+.grafikon-statistic-data {
+  display: none !important; }
+
+.grafikon-bubble {
+  position: absolute;
+  z-index: 101;
+  width: 170px;
+  top: 0px;
+  left: 0px;
+  padding: 10px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  background: #333;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  border-radius: 5px;
+  text-align: center;
+  font-weight: 300;
+  color: #fff; }
+  .grafikon-bubble p {
+    margin: 0 0 5px 0;
+    padding: 0; }
+  .grafikon-bubble p:last-child {
+    margin-bottom: 0; }
+
+.grafikon-bubble:after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 70px;
+  border-top: 10px solid #333;
+  border-top-color: #333;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent; }
+
+.grafikon-moreInfo {
+  position: absolute;
+  width: 250px;
+  top: 0;
+  right: -310px;
+  padding: 20px;
+  -webkit-border-radius: 15px;
+  -moz-border-radius: 15px;
+  -ms-border-radius: 15px;
+  border-radius: 15px;
+  border: 1px solid #fff;
+  background: rgba(51, 51, 51, 0.9);
+  font-size: 14px;
+  color: #fff; }
+  .grafikon-moreInfo h1 {
+    padding: 0;
+    margin: 0;
+    color: #fff;
+    text-align: left;
+    font-size: 20px;
+    font-weight: 300; }
+  .grafikon-moreInfo img, .grafikon-moreInfo iframe, .grafikon-moreInfo video {
+    max-width: 100%;
+    background: #000; }
+
+/* END */

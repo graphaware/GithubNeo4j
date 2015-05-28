@@ -164,4 +164,28 @@ RETURN (last.time - first.time) / 86400000 as count';
 
         return $this->client->sendCypherQuery($q, ['user' => $user])->getResult()->get('count');
     }
+
+    public function getUserLastRepoInteraction($user)
+    {
+        $q = 'MATCH (n:User {login:{user}})-[:LAST_EVENT|:PREVIOUS_EVENT*]->(event)
+MATCH (event)-[*2..5]->(repo:Repository)-[:OWNED_BY]->(owner)
+WITH event, repo, owner
+ORDER BY event.time DESC
+RETURN distinct repo.name as repository, owner.login as o
+LIMIT 20';
+        $p = ['user' => $user];
+        $r = $this->client->sendCypherQuery($q, $p)->getResult()->getTableFormat();
+
+        return $r;
+    }
+
+    public function getUserRepoLanguages($user)
+    {
+        $q = 'MATCH (user:User {login: {user_login}})<-[:OWNED_BY]-(r:Repository)
+        OPTIONAL MATCH (r)-[w:WRITTEN_IN_LANGUAGE]->(language)
+        RETURN language.name as lang, sum(w.lines) as loc';
+        $p = ['user_login' => $user];
+
+        return $this->client->sendCypherQuery($q, $p)->getResult()->getTableFormat();
+    }
 }

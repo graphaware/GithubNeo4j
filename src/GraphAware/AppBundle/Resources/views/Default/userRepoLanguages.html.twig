@@ -1,0 +1,57 @@
+<div class="col-sm-12 superwhite showcase showcase3 shadowed topBordered">
+    <div class="row">
+        <div class="col-sm-12 stat">
+            <div>
+                <div class="row">
+                    <div class="col-sm-3 text-center vqHolder">
+                        <h2 class="number eventsCount">{{ cl }}</h2>
+                        <p>Languages</p>
+                        <p class="queryTip">Programming languages used in your repositories and the corresponding lines of code</p>
+                    </div>
+                    <div class="col-sm-8 vqDisplay">
+
+                        <div role="tabpanel">
+
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" class="active"><a href="#home3" aria-controls="home3" role="tab" data-toggle="tab">Result</a></li>
+                                <li role="presentation"><a href="#profile3" aria-controls="profile3" role="tab" data-toggle="tab">Query</a></li>
+                            </ul>
+
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane active resultsTable" id="home3">
+                                    <table class="table-striped table">
+                                        <thead>
+                                        <tr>
+                                            <th>Language</th>
+                                            <th>Lines of code</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for l in languages %}
+                                            <tr>
+                                                <td>{{ l.lang }}</td>
+                                                <td>{{ l.loc }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div role="tabpanel" class="tab-pane" id="profile3">
+                                                                                                <pre class="prettyprint">
+MATCH (user:User {login: '{{ user }}'})<-[:OWNED_BY]-(r:Repository)
+OPTIONAL MATCH (r)-[w:WRITTEN_IN_LANGUAGE]->(language)
+RETURN language.name as lang, sum(w.lines) as loc
+                                            </pre>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

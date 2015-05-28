@@ -24,6 +24,10 @@ h1.splashTitle {
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15);
 }
 
+.shadowed-top {
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15);
+}
+
 .center {
     text-align: center;
 }
@@ -39,7 +43,7 @@ title {
 .navbar {
     padding-left: 15px;
     padding-right: 15px;
-    background-color: #f5f5f5;
+    background-color: #233445;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15);
     border-bottom: none;
 }
@@ -199,4 +203,20 @@ pre.prettyprint {
 
 p.queryTip {
     font-size: 14px;
+}
+
+#eventsCountPct {
+    padding-top: 20px;
+}
+
+.intro {
+    background: url('../images/intrograph.png') no-repeat;
+    background-position: -120px -480px;
+    height: 500px;
+}
+
+.resultsTable {
+    max-height: 250px;
+    overflow: scroll;
+    margin-bottom: 10px;
 }

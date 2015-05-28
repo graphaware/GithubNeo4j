@@ -40,8 +40,20 @@ class GithubClient
         }
 
         $eve = array_reverse($events);
+        //echo json_encode($eve, JSON_PRETTY_PRINT);
+        //exit();
 
         return $eve;
+    }
+
+    public function getRepoLanguages($repo, $owner)
+    {
+        $response = $this->httpClient->get(
+            self::BASE_URL.'/repos/' . $owner . '/' . $repo . '/languages?client_id=' . $this->clientId . '&client_secret=' . $this->clientSecret
+        );
+        $body = json_decode((string) $response->getBody());
+
+        return $body;
     }
 
     private function doCall($user, $page = 1)

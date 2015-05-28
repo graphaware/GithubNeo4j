@@ -24,6 +24,7 @@
 
         <service id="ga.github_importer" class="GraphAware\AppBundle\Service\GithubImporter">
             <argument type="service" id="ga.neo4j"/>
+            <argument type="service" id="ga.github_client"/>
         </service>
     </services>
 </container>

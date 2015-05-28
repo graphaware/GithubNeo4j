@@ -988,16 +988,16 @@
         },
         {
             "name": "ikwattro/github2cypher",
-            "version": "1.0.3",
+            "version": "1.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ikwattro/github2cypher.git",
-                "reference": "e1209814d5d32bffc2393202e786318266d44135"
+                "reference": "6eb89124f42fab0e7a0710fabfd7b6b077615f05"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ikwattro/github2cypher/zipball/e1209814d5d32bffc2393202e786318266d44135",
-                "reference": "e1209814d5d32bffc2393202e786318266d44135",
+                "url": "https://api.github.com/repos/ikwattro/github2cypher/zipball/6eb89124f42fab0e7a0710fabfd7b6b077615f05",
+                "reference": "6eb89124f42fab0e7a0710fabfd7b6b077615f05",
                 "shasum": ""
             },
             "require": {
@@ -1024,7 +1024,7 @@
                 }
             ],
             "description": "Github Public Events translated to Neo4j Cypher Statements",
-            "time": "2015-05-22 16:51:26"
+            "time": "2015-05-28 01:00:13"
         },
         {
             "name": "incenteev/composer-parameter-handler",

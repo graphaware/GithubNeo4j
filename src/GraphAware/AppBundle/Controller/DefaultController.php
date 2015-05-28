@@ -80,6 +80,40 @@ class DefaultController extends Controller
     }
 
     /**
+     * @Template()
+     */
+    public function userLastRepoInteractedAction()
+    {
+        $neo = $this->get('ga.github_neo');
+        $user = $this->getUser()->getLogin();
+        $repos = $neo->getUserLastRepoInteraction($user);
+
+        return array(
+            'repos' => $repos,
+            'user' => $user
+        );
+    }
+
+    /**
+     * @Template()
+     */
+    public function userRepoLanguagesAction()
+    {
+        $neo = $this->get('ga.github_neo');
+        $user = $this->getUser()->getLogin();
+        $languages = $neo->getUserRepoLanguages($user);
+        $cl = count($languages);
+
+        return array(
+            'languages' => $languages,
+            'user' => $user,
+            'cl' => $cl
+        );
+    }
+
+
+
+    /**
      * @Route("/createIndexes")
      */
     public function createIndexesAction()

@@ -34,6 +34,10 @@
 
                 {{ render(controller('GraphAwareAppBundle:Default:userEventsDayDiff')) }}
 
+                {{ render(controller('GraphAwareAppBundle:Default:userLastRepoInteracted')) }}
+
+                {{ render(controller('GraphAwareAppBundle:Default:userRepoLanguages')) }}
+
                 <div class="col-sm-12 showcase showcase1">
 
                     <h2 class="text-center">Your Github Timeline</h2>
@@ -141,6 +145,19 @@
         var lmW = $('#left-menu').width();
         $('#right-box').css('margin-left', lmW+75);
         prettyPrint();
+
+        $('#grafikon-statistic-unique-id').grafikon({
+            width: 250,
+            height: 160,
+            mode: "doughnut",
+            doughnut: {
+                click: true,
+                separator: true,
+                separatorColor: "#FEFEFD",
+                statisticId: "grafikon-statistic-unique-id",
+                holeSize: 5
+            }
+        });
     </script>
 
 {% endblock %}

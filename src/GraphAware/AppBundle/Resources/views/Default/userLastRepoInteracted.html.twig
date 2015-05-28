@@ -1,0 +1,60 @@
+<div class="col-sm-12 superwhite showcase showcase3 shadowed topBordered">
+    <div class="row">
+        <div class="col-sm-12 stat">
+            <div>
+                <div class="row">
+                    <div class="col-sm-3 text-center vqHolder">
+                        <h2 class="number eventsCount">20</h2>
+                        <p>Interactions</p>
+                        <p class="queryTip">The last 20 repositories you interacted with</p>
+                    </div>
+                    <div class="col-sm-8 vqDisplay">
+
+                        <div role="tabpanel">
+
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" class="active"><a href="#home2" aria-controls="home2" role="tab" data-toggle="tab">Result</a></li>
+                                <li role="presentation"><a href="#profile2" aria-controls="profile2" role="tab" data-toggle="tab">Query</a></li>
+                            </ul>
+
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane active resultsTable" id="home2">
+                                    <table class="table-striped table">
+                                        <thead>
+                                        <tr>
+                                            <th>Repository</th>
+                                            <th>Owned by</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for repo in repos %}
+                                            <tr>
+                                                <td><a href="https://github.com/{{ repo.o }}/{{ repo.repository }}">{{ repo.repository }}</a></td>
+                                                <td><a href="https://github.com/{{ repo.o }}">{{ repo.o }}</a></td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div role="tabpanel" class="tab-pane" id="profile2">
+                                                                                                <pre class="prettyprint">
+MATCH (n:User {login:'{{ user }}')-[:LAST_EVENT|:PREVIOUS_EVENT*]->(event)
+MATCH (event)-[*2..5]->(repo:Repository)-[:OWNED_BY]->(owner)
+WITH event, repo, owner
+ORDER BY event.time DESC
+RETURN distinct repo.name as repository, owner.login as o
+LIMIT 20
+                                            </pre>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
